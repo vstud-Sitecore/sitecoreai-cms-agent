@@ -1,0 +1,19 @@
+{
+  "apps": "./.app.json",
+  "author": {
+    "name": "App developer"
+  },
+  "description": "Sign in and manage your CMS.",
+  "interface": {
+    "capabilities": [],
+    "category": "Other",
+    "defaultPrompt": null,
+    "developerName": "App developer",
+    "displayName": "SitecoreAI CMS Agent",
+    "longDescription": "Sign in and manage your CMS.",
+    "shortDescription": "Sign in and manage your CMS."
+  },
+  "name": "dev-6aeb2bdba9cc8191afa581f13d5ff3be",
+  "version": "1.0.3",
+  "skills": "./skills"
+}
