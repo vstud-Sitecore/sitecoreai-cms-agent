@@ -1,0 +1,960 @@
+{
+  "verifiedOn": "2026-10-29",
+  "templateId": "93b92c2a-70a7-4c5c-9f55-abc5003201e2",
+  "templatePath": "/sitecore/templates/Project/Marketing/WWW/Agentic Event Page",
+  "rootPath": "/sitecore/content/Marketing/WWW/Home/Resources/Events Webinars",
+  "rootId": "778f8ead-0351-484f-b664-88d3f9a2610b",
+  "folderTemplateId": "a87a00b1-e6db-45ab-8b54-636fec3b5523",
+  "pageDesignId": "a412962f-3abb-4aae-8b8c-f815ac9956dd",
+  "sections": [
+    {
+      "templateId": "bc781d52-f85e-42c2-a53c-105b74a699e6",
+      "name": "Base Page",
+      "fields": [
+        {
+          "name": "NoIndexNoFollow",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "MetadataDescription",
+          "type": "multi-line text",
+          "validation": false
+        },
+        {
+          "name": "MetadataKeywords",
+          "type": "multi-line text",
+          "validation": false
+        },
+        {
+          "name": "MetadataTitle",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "OpenGraphDescription",
+          "type": "multi-line text",
+          "validation": false
+        },
+        {
+          "name": "OpenGraphImage",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "OpenGraphTitle",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "GlobalTaxonomies",
+          "type": "treelistex",
+          "validation": false
+        },
+        {
+          "name": "ContentOwnership",
+          "type": "treelistex",
+          "validation": false
+        },
+        {
+          "name": "ContentType",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "CustomMetadata",
+          "type": "name value list",
+          "validation": false
+        },
+        {
+          "name": "JsonLdMarkup",
+          "type": "multi-line text",
+          "validation": false
+        },
+        {
+          "name": "BaseTaxonomies",
+          "type": "treelistex",
+          "validation": false
+        },
+        {
+          "name": "InternalSearchImage",
+          "type": "image",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "6650fb34-7ea1-4245-a919-5cc0f002a6d7",
+      "name": "_Designable",
+      "fields": [
+        {
+          "name": "Page Design",
+          "type": "droplink",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "48e177f5-a2f8-4431-bfb4-794a0c96950b",
+      "name": "Event Hero",
+      "fields": [
+        {
+          "name": "EventEndDateTime",
+          "type": "datetime",
+          "validation": false
+        },
+        {
+          "name": "EventLocation",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventLogo6",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventLogo7",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventLogo8",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventLogoHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventLocationTagline",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventLogo1",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventLogo2",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventLogo3",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "HideTimeDetails",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "EventDateTagline",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventLogo4",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventLogo5",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventStartDateTime",
+          "type": "datetime",
+          "validation": false
+        },
+        {
+          "name": "EventTimeTagline",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventHeroEyebrow",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventHeroHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventHeroImage",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "EventHeroSubheading",
+          "type": "rich text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "3c4e6f9c-90a4-4022-83dc-5495c76ee20e",
+      "name": "Event Audience",
+      "fields": [
+        {
+          "name": "EventAudienceTitle",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventAudienceDescription",
+          "type": "rich text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "bda1dcbc-17be-4855-b26f-8530a8085019",
+      "name": "Event Overview",
+      "fields": [
+        {
+          "name": "EventOverviewQuote",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventOverviewQuoteTagline",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventOverviewSubheading",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventOverviewEyebrow",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventOverviewHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventOverviewImage",
+          "type": "image",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "e353adc5-99ae-4670-be9a-7ee7fd511a0d",
+      "name": "Event Takeaways",
+      "fields": [
+        {
+          "name": "EventKeyInfo",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPointHeading3",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPointHeading4",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPointHeading5",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPointHeading6",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPoint1",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPoint2",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPoint3",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPoint4",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventTakeawaysEyebrow",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventTakeawaysHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventTakeawaysSubheading",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPoint5",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPoint6",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPointHeading1",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventKeyPointHeading2",
+          "type": "single-line text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "690e72ea-9fba-4858-acf1-404f69d412fe",
+      "name": "Event Agenda",
+      "fields": [
+        {
+          "name": "EventAgendaHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventAgendaSubheading",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventAgendaTimetable",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventAgendaEyebrow",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventAgendaFootnote",
+          "type": "rich text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "75c207be-36ec-4b20-805d-7a3e9c123ea0",
+      "name": "Speakers",
+      "fields": [
+        {
+          "name": "Speaker1Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker1CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker1Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker1JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker1Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker1SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker2Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker2CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker2Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker2JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker2Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker2SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker3Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker3CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker3Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker3JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker3Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker3SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker4Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker6SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker7Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker7CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker7Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker7JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker7Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker7SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker8Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker4CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker4Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker4JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker4Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker4SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker5Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker5CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker5Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker8CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker8Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker8JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker8Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker8SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker9Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker9CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker9Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker5JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker5Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker5SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker6Bio",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "Speaker6CompanyName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker6Headshot",
+          "type": "image",
+          "validation": false
+        },
+        {
+          "name": "Speaker6JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker6Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker9Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker9JobRole",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Speaker9SocialLink",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "SpeakersEyebrow",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "SpeakersHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "SpeakersSubheading",
+          "type": "rich text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "8876527f-9fe2-4a05-a0f1-328aa8c42812",
+      "name": "Event FAQ",
+      "fields": [
+        {
+          "name": "EventFAQAnswer1",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer2",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQEyebrow",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion7",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion8",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer5",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer6",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion1",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion2",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion3",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion4",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer3",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer4",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer7",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQAnswer8",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion5",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQQuestion6",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventFAQSubheading",
+          "type": "rich text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "904e21e9-f05a-4285-a35b-fec6b2947d8b",
+      "name": "Event CTA",
+      "fields": [
+        {
+          "name": "EventCTAButton",
+          "type": "general link",
+          "validation": false
+        },
+        {
+          "name": "EventCTAHeading",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventCTASubheading",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "EventCTAButtonText",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "EventCTAEyebrow",
+          "type": "single-line text",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "e9adaf56-222a-476f-9566-258d377ab72a",
+      "name": "Form Datasource",
+      "fields": [
+        {
+          "name": "FormConfirmationMessage",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "FormPartnerName",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "LeftAlignFormTitleAndIntroText",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "FormDefaultCampaignProducts",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "FormDefaultProgramStatus",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "FormHostType",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "FormIntroText",
+          "type": "rich text",
+          "validation": false
+        },
+        {
+          "name": "FormType",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "LastInterestingMomentDescription",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "DisableCSRF",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "DisableProgressiveFunctionality",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "FormDefaultSalesforceCampaignID",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "FormGoal",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "FormSubmitText",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "FormTitle",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "RetargetingUrl",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "SetRetargetingUrl",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "DisableQueryStringOverride",
+          "type": "checkbox",
+          "validation": false
+        },
+        {
+          "name": "Email",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "FormPrivacyPolicyLink",
+          "type": "general link",
+          "validation": false
+        },
+        {
+          "name": "FormRedirectURL",
+          "type": "general link",
+          "validation": false
+        },
+        {
+          "name": "ProgressiveForm",
+          "type": "droplink",
+          "validation": false
+        },
+        {
+          "name": "ReCaptcha",
+          "type": "checkbox",
+          "validation": false
+        }
+      ]
+    },
+    {
+      "templateId": "1f4b8e79-188c-4e14-a1f1-2e270f39ca99",
+      "name": "Form Defaults",
+      "fields": [
+        {
+          "name": "Region",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Company Name",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Province",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "State",
+          "type": "single-line text",
+          "validation": false
+        },
+        {
+          "name": "Territory",
+          "type": "single-line text",
+          "validation": false
+        }
+      ]
+    }
+  ],
+  "referenceSources": {
+    "FormType": "query:$site/Data/Form Types/*[@@templateid='{FDF8B5E6-C3DC-441F-984A-66CE7811233C}']|$sharedSites/Data/Form Types/*[@@templateid='{FDF8B5E6-C3DC-441F-984A-66CE7811233C}']",
+    "FormDefaultProgramStatus": "query:$sharedSites/Data/Resources/Forms/Program Status/*",
+    "FormDefaultCampaignProducts": "query:$sharedSites/Data/Resources/Forms/Campaign Products/*"
+  },
+  "formTypeEventId": "807b51b0-87b8-45ea-a752-fbbfc25385b0",
+  "formTypeWebinarId": "271b50d2-9283-4885-bcf3-1aecf78bcbf6",
+  "referenceRoots": {
+    "FormType": "/sitecore/content/Marketing/Shared/Data/Form Types",
+    "FormDefaultProgramStatus": "/sitecore/content/Marketing/Shared/Data/Resources/Forms/Program Status",
+    "FormDefaultCampaignProducts": "/sitecore/content/Marketing/Shared/Data/Resources/Forms/Campaign Products"
+  }
+}
