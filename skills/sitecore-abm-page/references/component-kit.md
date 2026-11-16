@@ -191,7 +191,7 @@ Two sections in the doc. `## Form Defaults` pre-fills the visitor's form; `## Fo
 
 | Field | Type | Guidance |
 |---|---|---|
-| FooterDisclaimer | S | `© 2026 Sitecore A/S. Built for <Account>.` Use directly publishable, visitor-facing copy only. Never include review status or production notes such as "ready to be proofed", "awaiting review" or "draft". Add AI disclosure only when appropriate; claim completed human proofing only if confirmed. |
+| FooterDisclaimer | S | Required exact copy: `© 2026 Sitecore A/S. Built for [Account name]. The content for this page was generated with SitecoreAI; written by AI and human-proofed by your friends at Sitecore.` Replace only `[Account name]` with the target account's name. Preserve the year, punctuation and wording, including the AI disclosure. Plain single-line text only; no HTML or production notes. Update older mapping documents to this copy when building. |
 
 ## Icon library
 
