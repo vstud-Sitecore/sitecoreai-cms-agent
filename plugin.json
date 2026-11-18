@@ -1,0 +1,23 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dev-6aeb2bdba9cc8191afa581f13d5ff3be",
+  "version": "1.0.21",
+  "description": "Sign in and manage your CMS.",
+  "author": {
+    "name": "App developer"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "capabilities": [],
+        "category": "Other",
+        "defaultPrompt": null,
+        "developerName": "App developer",
+        "displayName": "SitecoreAI CMS Agent",
+        "longDescription": "Sign in and manage your CMS.",
+        "shortDescription": "Sign in and manage your CMS."
+      },
+      "apps": "./.app.json"
+    }
+  }
+}

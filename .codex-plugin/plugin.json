@@ -1,9 +1,4 @@
 {
-  "apps": "./.app.json",
-  "author": {
-    "name": "App developer"
-  },
-  "description": "Sign in and manage your CMS.",
   "interface": {
     "capabilities": [],
     "category": "Other",
@@ -13,7 +8,13 @@
     "longDescription": "Sign in and manage your CMS.",
     "shortDescription": "Sign in and manage your CMS."
   },
+  "apps": "./.app.json",
   "name": "dev-6aeb2bdba9cc8191afa581f13d5ff3be",
-  "version": "1.0.6",
+  "version": "1.0.21",
+  "description": "Sign in and manage your CMS.",
+  "author": {
+    "name": "App developer"
+  },
+  "keywords": [],
   "skills": "./skills"
 }

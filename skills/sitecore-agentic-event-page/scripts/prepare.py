@@ -4,49 +4,126 @@ Uses Python's standard library only. Does not call Sitecore or modify files.
 """
 import argparse
 import datetime as dt
+from html.parser import HTMLParser
 import json
 from pathlib import Path
 import re
 import sys
 import uuid
 import xml.etree.ElementTree as ET
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 SCHEMA = Path(__file__).resolve().parents[1] / 'references' / 'schema.json'
 
 
-def prepare(data, schema):
-    errors = []
+NATIVE_REQUIRED_FIELDS = (
+    'FormType', 'FormTitle', 'FormSubmitText', 'FormDefaultSalesforceCampaignID',
+)
+NATIVE_REGISTRATION_FIELDS = NATIVE_REQUIRED_FIELDS + (
+    'FormIntroText', 'FormConfirmationMessage', 'FormRedirectURL',
+    'FormDefaultProgramStatus', 'FormDefaultCampaignProducts',
+)
+URL_ATTRIBUTES = {'href', 'src', 'action', 'formaction', 'poster', 'xlink:href', 'cite'}
+
+
+def unsupported_url(value):
+    normalized = re.sub(r'[\t\r\n]', '', value).lstrip()
+    return re.match(r'(?:javascript|data):', normalized, re.I) is not None
+
+
+class RichTextURLs(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.has_unsupported_url = False
+
+    def handle_starttag(self, tag, attrs):
+        if any(value and unsupported_url(value) for name, value in attrs if name in URL_ATTRIBUTES):
+            self.has_unsupported_url = True
+
+
+def event_instant(raw, zone, key):
+    try:
+        if not isinstance(raw, str) or not re.match(r'^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}', raw):
+            raise ValueError()
+        timestamp = raw[:-1] + '+00:00' if raw.endswith('Z') else raw
+        local = dt.datetime.fromisoformat(timestamp)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f'{key} must be an ISO 8601 local date and time') from exc
+
+    if local.utcoffset() is not None:
+        zoned = local.astimezone(zone)
+        if (zoned.replace(tzinfo=None) != local.replace(tzinfo=None)
+                or zoned.utcoffset() != local.utcoffset()):
+            raise ValueError(f'{key} time and offset do not match {zone.key} on that date')
+        return zoned
+
+    candidates = set()
+    for fold in (0, 1):
+        utc = local.replace(tzinfo=zone, fold=fold).astimezone(dt.timezone.utc)
+        if utc.astimezone(zone).replace(tzinfo=None) == local:
+            candidates.add(utc)
+    if not candidates:
+        raise ValueError(f'{key} is skipped by a clock change in {zone.key}; choose a valid local time')
+    if len(candidates) > 1:
+        offsets = ' or '.join(utc.astimezone(zone).isoformat() for utc in sorted(candidates))
+        raise ValueError(f'{key} is ambiguous in {zone.key}; choose {offsets}')
+    return next(iter(candidates)).astimezone(zone)
+
+
+def prepare_schedule(data):
+    zone_name = data.get('timeZone')
+    if not isinstance(zone_name, str) or not zone_name:
+        raise ValueError('timeZone must be an IANA timezone name')
+    try:
+        zone = ZoneInfo(zone_name)
+    except (ValueError, ZoneInfoNotFoundError) as exc:
+        raise ValueError(f'Unknown timezone {zone_name!r}. Use an IANA name and a runtime with timezone data.') from exc
+
+    start = event_instant(data.get('start'), zone, 'start')
+    end = event_instant(data.get('end'), zone, 'end')
+    start_utc = start.astimezone(dt.timezone.utc)
+    end_utc = end.astimezone(dt.timezone.utc)
+    if end_utc <= start_utc:
+        raise ValueError('end must be after start')
+    return start, {
+        'EventStartDateTime': start_utc.strftime('%Y%m%dT%H%M%SZ'),
+        'EventEndDateTime': end_utc.strftime('%Y%m%dT%H%M%SZ'),
+    }
+
+
+def prepare(data, schema, *, schedule_only=False):
+    if not isinstance(data, dict):
+        raise ValueError('handoff must be a JSON object')
+    start, date_fields = prepare_schedule(data)
+    if schedule_only:
+        return {'fields': [{'name': name, 'value': value} for name, value in date_fields.items()]}
+
+    if 'intake' in data:
+        intake = data['intake']
+        if not isinstance(intake, dict) or not isinstance(intake.get('openQuestions', []), list):
+            raise ValueError('Legacy intake must be an object with an array of openQuestions')
+        if intake.get('openQuestions'):
+            raise ValueError('Resolve the recorded open questions before writing to the CMS')
+
     fields = data.get('fields', {})
     if not isinstance(fields, dict):
         raise ValueError('fields must be an object')
-    name = data.get('pageName', '')
-    if not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', name):
+
+    errors = []
+    name = data.get('pageName')
+    if not isinstance(name, str) or not re.fullmatch(r'[a-z0-9]+(?:-[a-z0-9]+)*', name):
         errors.append('pageName must be a lowercase URL slug with hyphens')
-    if not data.get('language'):
+    language = data.get('language')
+    if not isinstance(language, str) or not language.strip():
         errors.append('language is required')
-    if not data.get('timeZone'):
-        errors.append('timeZone is required; record the event timezone separately from its offset')
-    schedule = []
-    for key in ('start', 'end'):
-        try:
-            value = dt.datetime.fromisoformat(data.get(key, '').replace('Z', '+00:00'))
-            if value.utcoffset() is None:
-                raise ValueError()
-            schedule.append(value)
-        except (ValueError, TypeError):
-            errors.append(key + ' must be ISO 8601 with an explicit offset')
-    parent = None
-    if len(schedule) == 2:
-        if schedule[1] <= schedule[0]:
-            errors.append('end must be after start')
-        parent = schema['rootPath'] + schedule[0].strftime('/%Y/%m')
-        if data.get('destinationParent') != parent:
-            errors.append('destinationParent must match the event-local start year/month: ' + parent)
-        for key, value in zip(('EventStartDateTime', 'EventEndDateTime'), schedule):
-            expected = value.astimezone(dt.timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-            if fields.get(key) != expected:
-                errors.append(key + ' must equal the converted UTC value ' + expected)
-    manifest = {f['name']: f['type'] for s in schema['sections'] for f in s['fields']}
+    parent = schema['rootPath'] + start.strftime('/%Y/%m')
+    fields = {**fields, **date_fields}
+    invalid = [key for key, value in fields.items() if value is not None and not isinstance(value, str)]
+    if invalid:
+        errors.extend(key + ' must be a string or null' for key in invalid)
+        raise ValueError('\n'.join(errors))
+
+    manifest = {name: kind for section in schema['sections'] for name, kind in section['fields'].items()}
     for key, value in fields.items():
         if key not in manifest:
             errors.append('Unknown field: ' + key)
@@ -54,9 +131,6 @@ def prepare(data, schema):
         if value is None:
             continue
         kind = manifest[key]
-        if not isinstance(value, str):
-            errors.append(key + ' must be a string or null')
-            continue
         if kind in ('single-line text', 'multi-line text') and re.search(r'<[^>]+>', value):
             errors.append(key + ' cannot contain HTML')
         if kind == 'checkbox' and value not in ('', '0', '1'):
@@ -77,21 +151,23 @@ def prepare(data, schema):
                 if kind == 'image':
                     if root.get('mediaid'):
                         uuid.UUID(root.get('mediaid').strip('{}'))
-                    elif not all(root.get(attr) for attr in
-                                 ('src', 'dam-id', 'dam-content-type', 'width', 'height', 'thumbnailsrc')):
-                        errors.append(key + ' requires complete verified DAM image XML; src-only is unsupported in WWW')
-                    if key == 'OpenGraphImage':
-                        image_name = root.get('filename', '') or root.get('src', '').split('?')[0]
-                        extension = Path(image_name).suffix.lower()
-                        if extension and extension not in ('.png', '.jpg', '.jpeg'):
-                            errors.append('OpenGraphImage requires JPEG or PNG')
+                    elif not re.match(r'^https?://[^/\s]+', root.get('src', '')) or root.get('dam-content-type') != 'Image':
+                        errors.append(key + ' requires an actual mediaid or public image src plus dam-content-type=Image; other image metadata is optional')
                 if kind == 'general link' and not (root.get('url') or root.get('anchor') or root.get('id')):
                     raise ValueError()
+                if any(unsupported_url(root.get(attr, '')) for attr in ('url', 'src', 'thumbnailsrc')):
+                    errors.append(key + ' contains an unsupported URL scheme')
             except (ET.ParseError, ValueError):
                 errors.append(key + ' requires valid Sitecore image/link XML')
-        if re.search(r'(?:javascript|data):', value, re.I):
+        if (key == 'RetargetingUrl' or re.fullmatch(r'Speaker[1-9]SocialLink', key)) and unsupported_url(value):
             errors.append(key + ' contains an unsupported URL scheme')
-    for key in ('EventHeroHeading', 'EventHeroSubheading', 'EventStartDateTime', 'EventEndDateTime'):
+        if kind == 'rich text' and value:
+            parser = RichTextURLs()
+            parser.feed(value)
+            parser.close()
+            if parser.has_unsupported_url:
+                errors.append(key + ' contains an unsupported URL scheme')
+    for key in ('EventHeroHeading', 'EventHeroSubheading'):
         if not fields.get(key):
             errors.append(key + ' is required for a build-ready event brief')
     for i in range(1, 7):
@@ -110,12 +186,15 @@ def prepare(data, schema):
         errors.append('Overview attribution needs a quote')
     mode = data.get('registrationMode')
     if mode == 'native':
-        for key in ('FormType', 'FormTitle', 'FormSubmitText', 'FormDefaultSalesforceCampaignID'):
-            if not fields.get(key):
+        for key in NATIVE_REQUIRED_FIELDS:
+            if not (fields.get(key) or '').strip():
                 errors.append(key + ' is required for native registration')
         if not (fields.get('FormConfirmationMessage') or fields.get('FormRedirectURL')):
             errors.append('Native registration needs a confirmation or redirect')
     elif mode == 'external':
+        conflicting_fields = [name for name in NATIVE_REGISTRATION_FIELDS if (fields.get(name) or '').strip()]
+        if conflicting_fields:
+            errors.append('External registration cannot include native form settings: ' + ', '.join(conflicting_fields))
         if not fields.get('EventCTAButton') or not fields.get('EventCTAButtonText'):
             errors.append('External registration needs a CTA link and label')
         else:
@@ -142,10 +221,12 @@ def main():
         sys.stderr.reconfigure(encoding='utf-8')
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('handoff', type=Path)
+    parser.add_argument('--schedule-only', action='store_true', help='Output UTC date fields for an existing event')
     args = parser.parse_args()
     try:
         output = prepare(json.loads(args.handoff.read_text(encoding='utf-8-sig')),
-                         json.loads(SCHEMA.read_text(encoding='utf-8')))
+                         json.loads(SCHEMA.read_text(encoding='utf-8')),
+                         schedule_only=args.schedule_only)
         print(json.dumps(output, ensure_ascii=False, indent=2))
     except (ValueError, KeyError, OSError) as exc:
         print(str(exc), file=sys.stderr)
