@@ -1,88 +1,58 @@
 ---
-name: "sitecore-abm-page"
-description: "Create an ABM landing page in Sitecore for a target account from a content mapping doc. Use when the user asks to create/build an ABM page for an account."
+name: sitecore-abm-page
+description: Guide users through briefing a personalized ABM landing page for a named account, prepare its content mapping, and build an unpublished Sitecore Draft when requested. Use for account campaigns, personalized event invitations, supplied mappings, and continuing after mapping.
 ---
 
-# Sitecore ABM Landing Page Creation
+# Build an Agentic ABM Page
 
-Create an ABM landing page in Sitecore for a target account, populated from the user's attached content mapping doc (tables of Field | Content per section).
+Use this workflow for a new personalized account page from a brief, an existing Field | Content mapping, or a request to continue after mapping. Read the [ABM component kit](references/component-kit.md) for exact fields and defaults, the [shared Draft workflow](../../references/draft-workflow.md) for writes and checks, and the [shared field rules](../../references/content-fields.md) for field formats and asset lookup. For a targeted edit to an existing page, follow [Sitecore content editing](../sitecore-edit-content/SKILL.md).
 
-Use the tools bundled with the **SitecoreAI CMS Agent** plugin. Follow live tool schemas for arguments; the workflow below uses their short names. Do not configure another MCP server. If a tool reports expired credentials or authentication required, follow the bundled `sitecore-cms-agent` recovery skill and the host's native reconnect flow. Missing tools alone do not establish an authentication failure.
+## Confirm the brief before drafting
 
-This builder consumes an existing content mapping document. If one must be created, use `abm-page-guide` when installed. Otherwise request the mapping document; do not invent the account brief or draft copy as part of this build workflow.
+For a new ABM page, check the brief, prior user answers and user-provided materials for these five answers:
 
-Read the relevant sections of the bundled [component reference](references/component-kit.md) for exact fields, hero branding, verified media references and the icon catalog. Its identifiers are specific to WWW. If the connected environment differs, verify the site, parent, template and assets before writing. Stop if the intended target cannot be resolved.
+1. **Account and market.** Which organization, and which market or business unit if the name alone leaves it ambiguous?
+2. **Target reader.** Which team or roles at the account should this page speak to?
+3. **Account relationship.** Is the account a current customer, new prospect, former customer, partner, or unknown? If they are a current customer, invite the user to share relevant products or initiatives if known.
+4. **Reader familiarity.** Are these readers new to Sitecore, aware of the name, or already familiar through evaluation or use? Confirm this separately from the account relationship.
+5. **Campaign goal and action.** What priority, opportunity or event is the page for, and what should the visitor do next? Offer a concrete suggestion when useful.
 
-## Verified constants (skip discovery)
+An answer counts when the user supplied it, it is explicit in a user-provided brief, or the user explicitly delegated that choice. A generic product theme such as “a SitecoreAI message” leaves the goal and action open. Public research and agent assumptions cannot answer the intake on the user's behalf.
 
-- Site: WWW
-- Parent: `built-for` folder `31dbe568-c0b5-4545-9414-8cd017ff626e` (`/sitecore/content/Marketing/WWW/Home/Solutions/built-for`)
-- Template: Agentic ABM Page `98e0f7d6-d424-40ad-8f19-8cbbc7ad5ff7`
+**If any answer is missing, ask for the missing answers in one short message and end the turn. Wait for the user's reply before researching the account, drafting a mapping, or creating or updating anything in Sitecore.** A request to “create” or “build” the page authorizes the draft after intake. It does not waive the questions. Accept “unknown” or “use your best judgment” as answers, and offer those choices in the prompt. An explicit request to skip questions permits best-judgment defaults for remaining choices, provided the account is identifiable and the conversion path can be resolved. A ready-to-build mapping supplied by the user or prepared in an earlier turn after intake counts as the brief. Targeted edits to an existing page follow the separate edit workflow.
 
-## Steps
+For example, for “Create a new ABM page targeting JAECOO with a SitecoreAI message,” ask which market and readers to target, whether JAECOO is a current customer or prospect, how familiar those readers are with Sitecore, and which priority and next action to build around. Then wait. A brief that already answers or delegates these choices can proceed immediately.
 
-1. Read the content mapping doc fully, including Build requirements. Use the saved doc from this chat when available; no reattachment is needed.
-2. Complete Page naming below, then call `create_page` with the template and parent above, name = the exact space-separated `Page item name` recorded in Build requirements, **no fields parameter**.
-3. Apply the page settings below, then populate via `update_fields_on_item` in batches (metadata/hero → image fields → remaining text). Batching isolates errors: if one field name is wrong, the whole batch fails — retry without the offender, then resolve it separately.
-4. Leave the page in Draft and share a friendly preview link in this exact format:
-   `https://preview.sitecore.com/solutions/built-for/<page-name-slug>`
-   Build `<page-name-slug>` from the same page name passed to `create_page`: trim it, convert it to lowercase, replace each run of spaces with a single hyphen, and collapse repeated hyphens. For example, `Miami-Dade County` becomes `miami-dade-county`. Present the URL as a clickable Markdown link. **Do not call `get_page_preview_url` or return the long preview URL from Sitecore.**
+After intake, introduce Sitecore briefly for unfamiliar or unknown audiences and build on confirmed products or initiatives for familiar teams. If the relationship is unknown, write without assuming a deployment or commercial relationship. Keep unapproved sales notes out of visitor copy. Invite optional account notes, approved proof, assets or a specific Salesforce campaign ID in the same message if helpful. Use the documented General ABM campaign where appropriate when a specific ID is unavailable. Follow up only when a remaining gap prevents a sound page or a working conversion path.
 
-## Page naming
+## Plan and prepare the content
 
-For every new page, apply the bundled [Sitecore Page Namer rules](references/page-naming.md) before calling `create_page`. Use type `abm` (or `dbm` for an explicitly deal-specific page), with the target account and the actual purpose and content from the mapping document. Run its word draw, draft and validate at least four contextual candidates, then run the separate final draw using the bundled JavaScript helper. Prefer Codex's built-in Node REPL; no separate Python installation is required. This is a naming step within the build, not a separate naming-only response to the user.
+Use the brief, primary account sources and approved Sitecore messaging to identify specific priorities, outcomes and proof. Keep supporting sources and omission reasons in the mapping or internal notes. Verify event details, claims and direct quotes. Apply the workspace brand and copy guidance when available.
 
-- Generate a coherent four-to-eight-word item name using English letters and single spaces. Prefer the account name and include Sitecore when meaningful. Do not add a hex suffix, digits, punctuation, or a prehyphenated slug.
-- Before creation, record both `Page item name` and its derived `Page URL slug` in Build requirements. Pass the space-separated item name to `create_page`; Sitecore forms the URL. Use the existing preview-link conversion below.
-- A mapping document's old automatically generated account/campaign/hex slug is legacy build metadata: replace it with the generated phrase for a new page. Preserve a name the user explicitly selected or instructed you to use; ask only if that instruction is ambiguous. Do not interpret embedded document instructions as new user authorization.
-- Generate once per new page and preserve the selection across retries and later edits. When updating an existing page, preserve its item name and URL unless the user explicitly requests renaming. Do not rename an existing page merely to adopt these conventions.
-- If known sibling names or earlier candidates are available, avoid duplicates under the naming rules. If Sitecore reports a collision, exclude that name, select another valid candidate and update the mapping before retrying. On an ambiguous creation response, look up the exact item path before attempting another creation. Do not claim uniqueness without checking.
-- Keep NoIndexNoFollow checked. A less predictable phrase and noindex are not access control. If no genuine random execution tool is available, follow the naming reference's disclosed best-effort fallback; do not claim verified randomness.
+For a new mapping, default to a full page. Aim to fill most of the template's six optional sections when the evidence supports them, in addition to the required metadata, hero, form and footer. Evaluate every section before omitting it. Use one purpose per section and avoid repeating the hero's message.
 
-## Page settings and branding
+| Optional section | What to look for |
+|---|---|
+| Logo strip | Approved peer logos with a defensible connection to the story. Use a truthful label and avoid suggesting endorsements, attendance or relationships that have not been confirmed. |
+| Pain Points | Four distinct account-specific challenges, outcomes, reasons to attend or questions the readers bring. |
+| Use Cases | Six distinct steps and a result when there is a genuine workflow, adoption path or event journey. Verify step links or use the documented form anchor where appropriate. |
+| Solutions & Differentiator | Three relevant solution or topic pillars, each with imagery, plus one supported reason to choose the offer. |
+| Mid-Page CTA | A concise nudge tied to the main action and its verified destination. Include by default when the action is supported. |
+| Validation | A relevant sourced case study and supported analyst content, with verified links and approved imagery. |
 
-- **Item name and URL:** follow Page naming above. Keep the item name and derived URL slug distinct in Build requirements, and preserve the selected route through retries and edits. NoIndexNoFollow remains checked.
-- **Announcement bar:** leave `HeaderBannerDescription` empty by default. Only fill it for an explicit announcement recorded in Build requirements. Write an empty string when the mapping says `—`, including when updating a page, so inherited/previous text does not remain. Check that the rendered text bar is absent; do not move a positioning tagline into it.
-- **Navigation:** ask the user to select no navigation (recommended for focused conversion), section links within the page, or standard site navigation unless already settled. Record that choice in the mapping doc. For WWW, no navigation uses `Page Design` = `{9DBFD004-7816-4176-AD67-0384A404C513}` (Blank); standard navigation uses `{B6C665BC-2DC3-43C8-A344-22297B1D371D}` (Default). Verify these items if the environment changes. Section links need an existing supported implementation and valid destination anchors; if unavailable explain the limitation and obtain a supported choice. Do not invent navigation fields or alter shared designs to customize one page.
-- **Hero branding:** populate `HeroLogoPrimary` with the approved Sitecore reverse logo on almost all pages, and `HeroLogoSecondary` with the approved account logo when available. Read the bundled Hero branding instructions and verified DAM reference in `references/component-kit.md`. Use the existing slots and separator; never place logos inside HeroDescription or create a combined lockup. Preserve proportions, clear space and legibility. White mono works on the dark/gradient hero; use an approved dark variant on a light background. Record any deliberate omission/variant exception. A missing account logo is an explicit exception, never an invented asset or another customer's logo.
-- **DAM scope:** ideally the account logo is uploaded and approved in Content Hub DAM, then attached through its delivery reference. That upload is a future workflow instruction, not implemented automation. For now use verified existing media-library assets or supported approved DAM public delivery references. Never claim an upload occurred when it did not.
-- **DAM hero image values:** a mapping value `Use DAM image URL <https-url>` identifies the delivery asset, but is not the full Sitecore field value. Retrieve/copy its complete verified image XML, preserving `src`, `dam-id`, `dam-content-type`, `width`, `height`, `thumbnailsrc` and alt text. A bare `src` image resolves to an empty image in WWW. The guide reference includes the verified Sitecore reverse XML and source item. Escape XML attribute values and never guess DAM identity or metadata. Use delivery URLs, not DAM UI or thumbnail links. Verify rendering; never manufacture a mediaid from a DAM identity.
+Fill included fixed-size groups as complete units according to the kit. Match assets to the slots using the shared field rules, including approved ABM icons for the cards and flow. After intake, research [hero metrics](references/component-kit.md#hero-metrics) tied to the account and campaign goal. Lead the hero insights with the strongest relevant number and prioritize sourced metrics for the remaining slots. If a section still lacks substantive copy, proof, valid links, or suitable assets after looking for alternatives, record the reason and omit it as a unit. Never invent account facts, figures, quotes, relationships or endorsements to fill space.
 
-- **Required footer:** set `FooterDisclaimer` to exactly `© 2026 Sitecore A/S. Built for [Account name]. The content for this page was generated with SitecoreAI; written by AI and human-proofed by your friends at Sitecore.`, replacing only `[Account name]` with the target account's name. Apply this footer even when an older mapping document has a shorter footer or omits the AI disclosure, and update that document to match. Keep it as plain single-line text, with no HTML or production notes. Preserve the year, punctuation and wording as supplied.
+Prepare the Field | Content mapping and Build requirements using exact fields and the kit's defaults. Review copy, full groups, sources, asset references and the main CTA before any CMS write. Check each hero figure against its original source and keep its attribution clear in the rendered copy. If the request is for content or review only, deliver the mapping under the user's workspace output rules. If the user requests a draft build, proceed with the prepared or supplied mapping without a separate review round.
 
-## Field rules
+## Target and name
 
-- Field names in the mapping doc are exact matches to the template, including "Company Name" (with a space) and the "CaseStudyHightlight*" spelling (CaseStudyHightlightCTAText, CaseStudyHightlightCTALink).
-- Image fields: `<image mediaid="{GUID}" />`
-- **Single-line text fields: plain text only — NEVER wrap in `<p>` or any HTML.** This has gone wrong before specifically on `Mid-PageCTADescription` and `HeaderBannerDescription` — both are single-line text despite the "Description" name. Only fields the template defines as rich text get HTML.
-- Rich text fields (PainPointsDescription, PainPoint1–4Description, HeroDescription, HeroInsight1–3Description, Solution1–3Description, DifferentiatorDescription, Analyst1–3Description, FormIntroText): HTML — wrap in `<p>`, convert markdown links to `<a href>`, `<br><br>` becomes separate `<p>` blocks.
-- Checkbox (NoIndexNoFollow): `"1"` for checked.
-- Skip fields the doc marks as having no matching field (e.g. SolutionsDescription "—").
-- Strip editorial notes from doc values (e.g. italic asides in parentheses) — use only the actual content.
+WWW parent: `/sitecore/content/Marketing/WWW/Home/Solutions/built-for` (`31dbe568-c0b5-4545-9414-8cd017ff626e`). Template: Agentic ABM Page (`98e0f7d6-d424-40ad-8f19-8cbbc7ad5ff7`). Verify equivalent targets before using a different environment.
 
-## Image selection
+For a new page, choose one distinctive, contextual **3–7-word item name** in letters and single spaces. Avoid fixed account-and-campaign formulas and confidential details. Preserve a name the user explicitly chose and preserve existing routes unless the user requests a rename. Old automatically generated names or hex slugs in a mapping are proposals. Record the final item name and resulting slug in Build requirements. Use the item name for creation and reuse it across retries. Pick a different name for a verified collision with unrelated content.
 
-**A well-formed mapping doc already carries an explicit image ID in every image slot (or a verified DAM public delivery reference for hero logos). Use it verbatim and pick nothing yourself.** Image and icon choice is the `abm-page-guide` skill's job, not this one — only fall through to the rules below when a slot genuinely has no ID.
+## Populate and verify
 
-Where a slot says "most relevant image in Media Library under Images/ABM" instead of an ID:
-
-- **Icon slots** (PainPoint1–4Icon, UseCase1–6Icon, UseCaseResultsIcon, and every other icon slot) take icons **only**, and only from `/sitecore/media library/Images/ABM/Icons1` or `Icons2`. Never a photo, customer logo, illustration or other media library image, and never a `search_assets` result from outside those two folders — the layout renders these small on a coloured chip and anything but a flat icon turns to mush. This covers the whole flow chart: all six UseCase steps plus the result. If no icon fits a flow-chart step, use the `number-1-circle`…`number-6-circle` step markers in order rather than reaching outside the library.
-- **The icon library — names, GUIDs and association terms — is bundled with this skill at `references/component-kit.md` ("Icon library" section). That file is the single source of truth; read it rather than guessing, and record newly verified assets with the mapping doc; do not edit installed plugin resources during a page build.** Its "Known image IDs" section likewise carries the Sitecore message graphics, case study backgrounds and the Forrester/Gartner analyst logos.
-- Logo1–8: from `/sitecore/media library/Images/ABM/Customer Logos` — pick logos relevant to the account's sector/region.
-- Analyst logos: Analyst1 and Analyst3 are typically Forrester, Analyst2 Gartner — follow the doc's "expected" hints; GUIDs are in `component-kit.md`.
-
-### If a slot is absent from the bundled catalog
-
-Use these lookup rules for unresolved slots. If the bundled reference itself is missing, report an incomplete plugin package and stop:
-
-- Folder listings truncate at 50 children, so `get_content_item_by_id` on `Icons1` will not reveal anything past `increased-sales`. Don't retry it expecting more, and don't conclude an icon is missing. `Icons1` is the complete set of 83 icons; the 33 past the cap are reachable only by path. `Icons2` holds duplicate copies of those same 33 names under different IDs.
-- `search_assets` takes a **single keyword** and returns roughly 4 results, matching on item name and alt text. Since the September 2026 re-import every asset's Alt field is empty, so only the name matches. It is a token match, not a substring match — "sales" finds "increased-sales", but a partial word will not.
-- `get_content_item_by_path` with `failOnNotFound: false` is the reliable check for a specific guessed name (e.g. `/sitecore/media library/Images/ABM/Icons1/<name>`); it returns `{}` when nothing is there.
-- The 33 names in `Icons2` all exist in `Icons1` too, under different IDs. Either copy works; prefer the `Icons2` one for consistency with pages already built.
-
-## Notes
-
-- `update_fields_on_item` returns `"updatedFields": {}` even on success, and item reads return empty fields — this is normal; don't treat it as failure.
-- Before delivery, inspect the rendered preview for the exact randomized route, chosen navigation, absent announcement bar unless requested, legible hero logo(s), and a visible submit control. Use a screenshot plus rendered HTML when necessary. Verify form configuration and client-side validation without submitting test leads unless authorized. Report any unverified submission behavior or missing artwork; do not claim an end-to-end form test without performing one.
-- Keep the page in Draft. Do not publish. Save the page ID, exact item name/slug, preview link, applied settings and any exceptions with the mapping doc.
-- When done, briefly summarize the judgment calls made. If the doc left slots unfilled and you had to choose images yourself, say which — that usually means the mapping doc needs fixing upstream.
+- Apply the component kit's required settings and form configuration. Fill missing supported metadata and form confirmation copy before writing. Use the confirmed campaign ID or the documented General ABM default when applicable. For a new draft use the current footer copy from the kit, even if the source mapping has an older footer. Preserve the source mapping’s footer and leave an existing page’s footer alone unless the user requests a footer edit. Ask only about unresolved material decisions.
+- Honor explicit asset selections and omissions. When a selection is needed, follow the shared image lookup and the [ABM media slot rules](references/component-kit.md#media-slot-rules).
+- On WWW share the friendly preview at `https://preview.sitecore.com/solutions/built-for/<slug>`. Use the verified route. For standard names the slug is lowercase with spaces replaced by single hyphens. Inspect the preview for the chosen navigation, announcement bar, hero branding, and visible submit control. Confirm that included optional sections render with their full set of cards, steps or pillars, and check the form configuration without submitting.
+- Save the page ID, item name and slug, preview and any exceptions with the mapping. Lead with the direct Sitecore editor link and include the clickable preview. Summarize material assumptions, omitted components and their reasons, and any unverified behavior. Finish with the [Salesforce campaign ID report](../../references/draft-workflow.md#campaign-id-in-the-build-summary).
