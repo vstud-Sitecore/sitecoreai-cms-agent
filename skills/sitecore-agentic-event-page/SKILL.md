@@ -13,6 +13,12 @@ Read the complete supplied document, including image guidance, form settings and
 
 The component guide specifies the JSON handoff keys. Normalize a Markdown mapping into that handoff before validation. Save exact field values separately from sources and production notes; preserve null as skip and an empty string as an explicit clear. Use the source document's registration type when it maps to a verified CMS option. Resolve a generic label such as "General form" against real options and the relevant existing event configuration, rather than writing the label into a reference field. The verified Event form type is a default only when the intended form remains unspecified. Use the supplied campaign ID and confirmation/redirect; do not borrow an ABM campaign or invent a live campaign.
 
+## Resolve named speakers from People
+
+Accept a speaker's full name as sufficient input to start lookup; do not require the author to repeat an existing profile's headshot, role or bio. Before asking for missing speaker details, follow [People lookup and speaker refresh](references/component-guide.md#people-lookup-and-speaker-refresh). Use verified People content for unspecified fields, flag missing or ambiguous profiles to the author, and preserve explicit brief overrides.
+
+For an existing event, refresh only the requested speakers and fields on that page. Re-read their People items when a refresh is requested. These are copied field values, not live Person references: later People changes do not automatically update event pages. Do not modify shared People items as part of an event build or refresh.
+
 ## Verified template and destination
 
 - Site: WWW.

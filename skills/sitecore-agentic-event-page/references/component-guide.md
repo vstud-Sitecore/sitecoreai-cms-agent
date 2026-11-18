@@ -24,6 +24,44 @@ Event start/end are entered as event-local times in the brief; record a named ti
 
 Location: prefer a linked venue name in EventLocation and the address in EventLocationTagline. For a virtual event describe the joining arrangement honestly; do not publish private attendee meeting links unless intended for public use.
 
+## People lookup and speaker refresh
+
+A Word brief may supply only a full name, such as `Scott Liewehr`. Retrieve the remaining speaker content from the shared People folder before asking the author to supply it.
+
+### Find and verify the profile
+
+- Root: `/sitecore/content/Marketing/WWW/Data/People`, organized into alphabetical subfolders. Start with the full name's initial and exact item path, for example `/sitecore/content/Marketing/WWW/Data/People/S/Scott Liewehr`, using `get_content_item_by_path` with `failOnNotFound:false` and the event language.
+- Read the candidate and verify that it is a Person item and its `Name` matches the requested full name. Use any supplied company or role to disambiguate. Inspect relevant alphabetical folders for spacing, punctuation or item-name variants when the exact path misses. A child listing can stop at 50; do not treat a truncated listing as an exhaustive search.
+- An exact path is a starting point, not proof of identity. If multiple profiles remain plausible, present their names, companies and CMS paths and ask the author to choose. Do not select the first or closest match.
+- Distinguish no matching profile from inaccessible content, connector failure, or a missing language version. Report the actual lookup limitation; do not label it "person not found" or silently use another language.
+
+### Map to the event speaker slot
+
+| Person field | Event field |
+|---|---|
+| `Name` | `SpeakerNName` |
+| `JobTitle` | `SpeakerNJobRole` |
+| `Company` | `SpeakerNCompanyName` |
+| `Info` | `SpeakerNBio` (retain supported rich-text HTML) |
+| `Image` | `SpeakerNHeadshot` (reuse the verified same-image XML) |
+| `LinkedinLink` | `SpeakerNSocialLink` (extract a verified public URL from link XML; never put XML in this plain-text field) |
+
+These source fields were checked on Scott Liewehr's Person item on 18 November 2026. Inspect the live profile rather than assuming every Person has every field. Follow the existing asset and datatype rules. Leave missing optional source fields blank and name those gaps in the handoff; never infer a role, company, bio, social URL or headshot.
+
+On a new build, People supplies fields omitted from the brief. Keep explicit supplied speaker values; if they conflict with People, flag the difference and retain the brief's value unless the author requests the current People value. On an existing event, preserve populated fields outside the requested update. When asked to refresh a named speaker from People, resolve the existing slot by identity, re-read the profile and update that slot; do not append a duplicate speaker or create another page. Replacing a speaker must not retain the previous person's bio, company, links or headshot. Flag missing replacement details and obtain a decision to supply or clear them.
+
+### Flag unresolved speakers
+
+Warn the author before claiming the speaker section is complete. For example: "No matching People profile was found for [full name]. Please provide the correct People item or the speaker's approved details, or confirm that this speaker should be omitted."
+
+The same rule applies to external speakers: an external person may already have a Person item, and no match does not establish that someone is external. Use approved details supplied in the brief when available, while reporting that no reusable profile was resolved. If only a name is available, ask whether to supply details, include the speaker with just that name, or omit them. Continue independent preparation while waiting; do not silently omit the speaker, invent missing details, create a People item, or treat silence as permission.
+
+Record each speaker's requested name, matched item ID/path, source language and retrieval date, copied fields, explicit overrides, missing fields and unresolved decisions in the readable mapping outside `fields`. Return actionable lookup warnings to the author in the build summary and final handoff.
+
+### Copy and refresh behavior
+
+The current event template stores speaker content in its numbered fields. People is the lookup source; the event receives a snapshot when built or explicitly refreshed. Changes to a Person item do not propagate automatically. Do not claim live synchronization or write a Person GUID into these text/image fields. Direct references and automatic propagation require separate component/template support and are outside this workflow.
+
 ## Registration and references
 
 FormType default Event: 807b51b0-87b8-45ea-a752-fbbfc25385b0.

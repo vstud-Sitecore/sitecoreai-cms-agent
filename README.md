@@ -22,6 +22,8 @@ Connect SitecoreAI CMS Agent and supply the event brief or field mapping. Includ
 
 The optional separate `agentic-event-page-guide` can help prepare copy, but is not required to use this builder. ABM account questions and the ABM page-naming flow do not apply to ordinary event pages. Existing explicit names and routes are preserved for updates. Required references, image metadata, registration controls, rendered dates and Draft workflow are checked before reporting completion. Builds never publish the page or submit a real registration as a test.
 
+Event briefs can list speakers by full name only. The builder looks up matching Person items in the shared WWW People folder and copies their available name, role, company, bio, headshot and LinkedIn URL into the event. It flags missing or ambiguous matches and missing profile details for the author. Existing speaker details can be refreshed on request; later changes to People do not synchronize automatically.
+
 ## Package layout
 
 The Codex compatibility manifest is `.codex-plugin/plugin.json`, the registered app mapping is `.app.json`, and skill resources are under `skills/`.
