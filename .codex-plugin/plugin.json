@@ -10,7 +10,7 @@
   },
   "apps": "./.app.json",
   "name": "dev-6aeb2bdba9cc8191afa581f13d5ff3be",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Sign in and manage your CMS.",
   "author": {
     "name": "App developer"
